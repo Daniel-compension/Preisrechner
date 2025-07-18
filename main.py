@@ -1,7 +1,21 @@
 import streamlit as st
 
-# Preisstaffel für "benefito"
-STAFFELN_BENEFITO = [
+# --- Layout & Logo ---
+st.set_page_config(page_title="Preisrechner – COMPENSION", layout="centered")
+
+st.markdown(
+    """
+    <div style='text-align: center;'>
+        <img src='https://raw.githubusercontent.com/Daniel-compension/preisrechner/main/COMPENSION_Claim_Logo_rgb.png' width='300'/>
+        <h1 style='color:#005B94;'>Preisrechner</h1>
+        <p>Berechne den Preis für das Produkt <strong>benefito</strong> auf Basis der Mitarbeiteranzahl.</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# --- Preisstaffel als Liste ---
+preisstaffel = [
     (50, 8.41),
     (100, 7.98),
     (200, 7.11),
@@ -9,26 +23,22 @@ STAFFELN_BENEFITO = [
     (750, 6.19),
     (1000, 6.09),
     (1500, 4.64),
-    (2000, 3.63)
+    (2000, 3.63),
 ]
 
-def berechne_benefito_preis(mitarbeiteranzahl):
-    for maximum, preis_pro_ma in STAFFELN_BENEFITO:
-        if mitarbeiteranzahl <= maximum:
-            gesamtpreis = mitarbeiteranzahl * preis_pro_ma
-            return f"{preis_pro_ma:.2f} €", f"{gesamtpreis:,.2f} €".replace(",", "X").replace(".", ",").replace("X", ".")
-    return "Individuelle Vereinbarung", "Individuelle Vereinbarung"
+# --- Eingabe ---
+mitarbeiterzahl = st.number_input("Anzahl der Mitarbeiter eingeben:", min_value=1, step=1)
 
-# Streamlit UI
-st.set_page_config(page_title="Preisrechner", layout="centered")
-st.title("💰 Preisrechner – Basispreis pro Mitarbeiter")
+# --- Preisermittlung ---
+def berechne_preis(mitarbeiter):
+    for grenze, preis in preisstaffel:
+        if mitarbeiter <= grenze:
+            return f"{preis:.2f} € pro Mitarbeiter"
+    return "Individuelle Vereinbarung"
 
-# Eingabe
-mitarbeiter = st.number_input("Anzahl der Mitarbeitenden", min_value=1, step=1)
-
-# Berechnung & Ausgabe
-if st.button("Preis berechnen"):
-    preis_pro_ma, gesamtpreis = berechne_benefito_preis(mitarbeiter)
+# --- Ergebnis anzeigen ---
+if mitarbeiterzahl:
+    st.markdown("---")
     st.subheader("📊 Ergebnis")
-    st.write(f"**Preis pro Mitarbeitenden:** {preis_pro_ma}")
-    st.write(f"**Gesamtpreis:** {gesamtpreis}")
+    ergebnis = berechne_preis(mitarbeiterzahl)
+    st.success(ergebnis)
