@@ -3,10 +3,13 @@ import streamlit as st
 # --- Layout & Logo ---
 st.set_page_config(page_title="Preisrechner – COMPENSION", layout="centered")
 
+# Logo anzeigen (lokal)
+st.image("COMPENSION_Claim_Logo_rgb.png", width=300)
+
+# Überschrift und Einleitung
 st.markdown(
     """
     <div style='text-align: center;'>
-        <img src='https://raw.githubusercontent.com/Daniel-compension/preisrechner/main/COMPENSION_Claim_Logo_rgb.png' width='300'/>
         <h1 style='color:#005B94;'>Preisrechner</h1>
         <p>Berechne den Preis für das Produkt <strong>benefito</strong> auf Basis der Mitarbeiteranzahl.</p>
     </div>
