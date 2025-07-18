@@ -3,7 +3,7 @@ import streamlit as st
 # --- Layout & Logo ---
 st.set_page_config(page_title="Preisrechner – COMPENSION", layout="centered")
 
-# Logo anzeigen (lokal)
+# Logo anzeigen
 st.image("COMPENSION_Claim_Logo_rgb.png", width=300)
 
 # Überschrift und Einleitung
@@ -36,12 +36,19 @@ mitarbeiterzahl = st.number_input("Anzahl der Mitarbeiter eingeben:", min_value=
 def berechne_preis(mitarbeiter):
     for grenze, preis in preisstaffel:
         if mitarbeiter <= grenze:
-            return f"{preis:.2f} € pro Mitarbeiter"
-    return "Individuelle Vereinbarung"
+            gesamt = mitarbeiter * preis
+            return preis, gesamt
+    return None, None
 
 # --- Ergebnis anzeigen ---
 if mitarbeiterzahl:
     st.markdown("---")
     st.subheader("📊 Ergebnis")
-    ergebnis = berechne_preis(mitarbeiterzahl)
-    st.success(ergebnis)
+
+    einzelpreis, gesamtpreis = berechne_preis(mitarbeiterzahl)
+
+    if einzelpreis is None:
+        st.warning("Individuelle Vereinbarung")
+    else:
+        st.success(f"Einzelpreis: **{einzelpreis:.2f} €** pro Mitarbeiter")
+        st.info(f"Gesamtbetrag: **{gesamtpreis:,.2f} €** für {mitarbeiterzahl:.0f} Mitarbeiter")
